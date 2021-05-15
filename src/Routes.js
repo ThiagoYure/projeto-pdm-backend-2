@@ -33,7 +33,7 @@ const Tabs = () => {
         ),
       }} name="Anuncios">
         {() => (
-          <Stack.Navigator initialRouteName="Anuncios">
+          <Stack.Navigator initialRouteName="Anuncios" >
             <Stack.Screen name="Anuncios" component={Anuncios} />
             <Stack.Screen name="DetalheImovel" component={DetalheImovel} />
           </Stack.Navigator>
@@ -72,7 +72,9 @@ const TabsUser = () => {
       }} name="Home">
         {() => (
           <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Home" component={Home} options={{
+              headerLeft: () => { null }
+            }} />
             <Stack.Screen name="EdicaoImovel" component={EdicaoImovel} />
           </Stack.Navigator>
         )}
@@ -81,12 +83,28 @@ const TabsUser = () => {
         tabBarIcon: ({ color }) => (
           <Icon name="home-plus" color={color} size={26} />
         ),
-      }} name="CadastroImovel" component={CadastroImovel} />
+      }} name="CadastroImovel">
+        {() => (
+          <Stack.Navigator>
+            <Stack.Screen name="CadastroImovel" component={CadastroImovel} options={{
+              headerLeft: () => { null }
+            }} />
+          </Stack.Navigator>
+        )}
+      </Tab.Screen>
       <Tab.Screen options={{
         tabBarIcon: ({ color }) => (
           <Icon name="cog" color={color} size={26} />
         ),
-      }} name="Perfil" component={Perfil} />
+      }} name="Perfil">
+        {() => (
+          <Stack.Navigator>
+            <Stack.Screen name="Perfil" component={Perfil} options={{
+              headerLeft: () => { null }
+            }} />
+          </Stack.Navigator>
+        )}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }
@@ -95,20 +113,11 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Tab">
-        <Stack.Screen name="Tabs" component={Tabs} />
-        <Stack.Screen name="TabsUser" component={TabsUser} />
+        <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+        <Stack.Screen name="TabsUser" component={TabsUser} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-/*<Stack.Navigator>
-        <Stack.Screen name="CadastroUsuario" component={CadastroUsuario} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Perfil" component={Perfil} />
-        <Stack.Screen name="CadastroImovel" component={CadastroImovel} />
-        <Stack.Screen name="DetalheImovel" component={DetalheImovel} />
-        <Stack.Screen name="EdicaoImovel" component={EdicaoImovel} />
-      </Stack.Navigator>*/
 
 export default Routes;
