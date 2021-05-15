@@ -5,7 +5,7 @@ const Anuncios  = ({ navigation }) => {
     return (
       <View>
         <Text>bem vindo ao HomeMatcH!</Text>
-        <Button title="Login" onPress={() => navigation.navigate('Login')}/>
+        <Button title="Detalhes do Imóvel" onPress={() => navigation.navigate('DetalheImovel')}/>
       </View>
     );
 }
