@@ -1,4 +1,4 @@
-import AsyncStorage from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const setToken = value => {
   AsyncStorage.setItem('token', value).catch(err => console.log(err));
@@ -21,6 +21,21 @@ export const setId = value => {
 
 export const getId = () => {
   return AsyncStorage.getItem('id')
+    .then(res => {
+      if (res !== null) {
+        return res;
+      }
+    //   console.log('Erro');
+    })
+    .catch(err => console.log(err));
+};
+
+export const setUser = value => {
+  AsyncStorage.setItem('user', value).catch(err => console.log(err));
+};
+
+export const getUser = () => {
+  return AsyncStorage.getItem('user')
     .then(res => {
       if (res !== null) {
         return res;

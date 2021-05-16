@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import api from './services/Api';
+import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
 
 const DetalheImovel = ({ navigation, route }) => {
   return (
@@ -22,11 +24,27 @@ const DetalheImovel = ({ navigation, route }) => {
         <Text style={{
           fontSize: 18,
           color: '#633015',
-        }}>{route.params.metragem}</Text>
+        }}>{route.params.metrosQuadrados}</Text>
+        <Text style={{
+          fontSize: 18,
+          color: '#633015',
+        }}>{route.params.preco}</Text>
       </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         <Text style={styles.label}>Proprietário(a): </Text>
-        <Text style={styles.label}>{route.params.proprietario}</Text>
+        <Text style={styles.buttonLabel}>{
+          () => {
+            api
+              .get(`users/${route.params.userId}`)
+              .then(res => {
+                return res.nome
+              })
+              .catch(error => {
+                alert("Erro");
+                console.log(error);
+              });
+          }
+        }</Text>
       </View>
       <View style={{ flexDirection: 'column' }}>
         <Text style={{
@@ -39,13 +57,37 @@ const DetalheImovel = ({ navigation, route }) => {
           marginRight: '10%',
           fontSize: 18,
           color: '#633015',
-        }}>{route.params.email}</Text>
+        }}>{
+            () => {
+              api
+                .get(`users/${route.params.userId}`)
+                .then(res => {
+                  return res.email
+                })
+                .catch(error => {
+                  alert("Erro");
+                  console.log(error);
+                });
+            }
+          }</Text>
         <Text style={{
           marginLeft: '10%',
           marginRight: '10%',
           fontSize: 18,
           color: '#633015',
-        }}>{route.params.telefone}</Text>
+        }}>{
+            () => {
+              api
+                .get(`users/${route.params.userId}`)
+                .then(res => {
+                  return res.telefone
+                })
+                .catch(error => {
+                  alert("Erro");
+                  console.log(error);
+                });
+            }
+          }</Text>
       </View>
     </ScrollView>
   );

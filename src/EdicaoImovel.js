@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import api from './services/Api';
-import { setId, setToken } from './services/PersistToken';
+import { setId, setToken, getUser } from './services/PersistToken';
 
 const EdicaoImovel = ({ navigation, route }) => {
   const [id, onChangeId] = useState(route.params.id);
+  const idUser = getUser.id;
   const [cidade, onChangeCidade] = useState(route.params.cidade);
   const [bairro, onChangeBairro] = useState(route.params.bairro);
   const [rua, onChangeRua] = useState(route.params.rua);
   const [numero, onChangeNumero] = useState(route.params.numero);
   const [descricao, onChangeDescricao] = useState(route.params.descricao);
-  const [metragem, onChangeMetragem] = useState(route.params.metragem);
+  const [metrosQuadrados, onChangeMetrosQuadrados] = useState(route.params.metrosQuadrados);
+  const [preco, onChangePreco] = useState(route.params.preco);
 
   const handleEdicaoImovel = () => {
-    const data = { metragem, descricao, id, cidade, rua, bairro, numero };
+    const data = { metrosQuadrados, descricao, idUser, cidade, rua, bairro, numero,preco };
     api
-      .put('imovel', data)
+      .put(`real-states/${id}`, data)
       .then(res => {
         alert("Imóvel atualizado com sucesso!");
       })
@@ -26,9 +28,9 @@ const EdicaoImovel = ({ navigation, route }) => {
   };
 
   const handleDeleteImovel = () => {
-    const data = { metragem, descricao, id, cidade, rua, bairro, numero };
+    const data = { metrosQuadrados, descricao, cidade, rua, bairro, numero, preco };
     api
-      .delete('imovel', data)
+      .delete(`real-states/${id}`)
       .then(res => {
         alert("Imóvel removido com sucesso!");
         navigation.navigate('Home');
@@ -82,16 +84,24 @@ const EdicaoImovel = ({ navigation, route }) => {
       </View>
       <TextInput
         style={{ marginTop: 10 }}
-        placeholder={'Descrção...'}
+        placeholder={'Descrição...'}
         onChangeText={onChangeDescricao}
         value={descricao}
       />
-      <TextInput
-        style={{ marginTop: 10 }}
-        placeholder={'Metragem...'}
-        onChangeText={onChangeMetragem}
-        value={metragem}
-      />
+      <View style={{ flexDirection: 'row' }}>
+        <TextInput
+          style={{ marginTop: 10 }}
+          placeholder={'Metragem Quadrática...'}
+          onChangeText={onChangeMetrosQuadrados}
+          value={metrosQuadrados}
+        />
+        <TextInput
+          style={{ marginTop: 10 }}
+          placeholder={'Preco...'}
+          onChangeText={onChangePreco}
+          value={preco}
+        />
+      </View>
       <View style={{ flexDirection: 'row', paddingBottom: 20, }}>
         <TouchableOpacity style={styles.buttonMenor} onPress={() => handleDeleteImovel()}>
           <Text style={{

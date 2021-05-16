@@ -13,6 +13,7 @@ import CadastroImovel from './CadastroImovel';
 import DetalheImovel from './DetalheImovel';
 import EdicaoImovel from './EdicaoImovel';
 import Perfil from './Perfil';
+import PesquisaImovel from './PesquisaImovel'
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -35,8 +36,20 @@ const Tabs = () => {
       }} name="Anuncios">
         {() => (
           <Stack.Navigator initialRouteName="Anuncios" >
-            <Stack.Screen name="Anuncios" options={{title: ""}} component={Anuncios} />
-            <Stack.Screen name="DetalheImovel" options={{title: ""}} component={DetalheImovel} />
+            <Stack.Screen name="Anuncios" options={{ title: "" }} component={Anuncios} />
+            <Stack.Screen name="DetalheImovel" options={{ title: "" }} component={DetalheImovel} />
+          </Stack.Navigator>
+        )}
+      </Tab.Screen>
+      <Tab.Screen options={{
+        tabBarIcon: ({ color }) => (
+          <Icon name="magnify" color={color} size={26} />
+        ),
+      }} name="PesquisaImovel">
+        {() => (
+          <Stack.Navigator initialRouteName="PesquisaImovel" >
+            <Stack.Screen name="PesquisaImovel" options={{ title: "" }} component={PesquisaImovel} />
+            <Stack.Screen name="DetalheImovel" options={{ title: "" }} component={DetalheImovel} />
           </Stack.Navigator>
         )}
       </Tab.Screen>
@@ -47,8 +60,8 @@ const Tabs = () => {
       }} name="Login">
         {() => (
           <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" options={{title: ""}} component={Login} />
-            <Stack.Screen name="CadastroUsuario" options={{title: ""}} component={CadastroUsuario} />
+            <Stack.Screen name="Login" options={{ title: "" }} component={Login} />
+            <Stack.Screen name="CadastroUsuario" options={{ title: "" }} component={CadastroUsuario} />
           </Stack.Navigator>
         )}
       </Tab.Screen>
@@ -77,7 +90,7 @@ const TabsUser = () => {
               title: "",
               headerLeft: () => { null }
             }} />
-            <Stack.Screen name="EdicaoImovel" component={EdicaoImovel} options={{title: ""}}/>
+            <Stack.Screen name="EdicaoImovel" component={EdicaoImovel} options={{ title: "" }} />
           </Stack.Navigator>
         )}
       </Tab.Screen>

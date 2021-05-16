@@ -3,18 +3,23 @@ import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button } fro
 import api from './services/Api';
 import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
 
-const Anuncios = ({ navigation }) => {
+const PesquisaImovel = ({ navigation }) => {
+  const [pesquisa, onChangePesquisa] = useState('');
   const [anuncios, onChangeAnuncios] = useState([{}]);
 
-  api
-    .get(`real-states`)
-    .then(res => {
-      onChangeAnuncios(res);
-    })
-    .catch(error => {
-      alert("Erro");
-      console.log(error);
-    });
+  const handlePesquisaImovel = () => {
+    if (pesquisa != '') {
+      api
+        .get(`real-states`)
+        .then(res => {
+          onChangeAnuncios(res);
+        })
+        .catch(error => {
+          alert("Erro");
+          console.log(error);
+        });
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -22,7 +27,7 @@ const Anuncios = ({ navigation }) => {
         style={styles.logo}
         source={require('./img/HomeMatcHAlpha.png')}
       />
-      <Text style={styles.title}>Anuncios</Text>
+      <Text style={styles.title}>Resultado da Pesquisa</Text>
       <FlatList
         style={{ marginBottom: 100 }}
         data={anuncios}
@@ -34,7 +39,7 @@ const Anuncios = ({ navigation }) => {
                 source={require('./img/HomeMatcHAlpha.png')}
               />
               <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
-              <Text style={styles.buttonLabel}>{item.metragem}</Text>
+              <Text style={styles.buttonLabel}>{item.metrosQuadrados}</Text>
               <Text style={styles.buttonLabel}>{
                 () => {
                   api
@@ -109,9 +114,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignSelf: 'center',
-    width: 180,
-    height: 70,
+    width: 155,
+    height: 60,
   }
 });
 
-export default Anuncios;
+export default PesquisaImovel;

@@ -1,12 +1,46 @@
-import React from 'react';
-import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import api from './services/Api';
+import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
 
-const Home  = ({ navigation}) => {
-  const anuncios = [
-    { id: '01', rua: 'Rua dos Alfeneiros', descricao: 'Esta casa é muito boa, não tem nada errado', numero: '04', bairro: 'Collington', cidade: 'Londres-ENG', metragem: '200 m²', proprietario: 'Eu mesmo', email: 'eumesmo@email.com', telefone: '(XX) XXXXX-XXXX', image: './img/HomeMatcHAlpha.png' },
-    { id: '02', rua: 'Rua dos Alfeneiros', descricao: 'Esta casa é muito boa, não tem nada errado', numero: '05', bairro: 'Collington', cidade: 'Londres-ENG', metragem: '200 m²', proprietario: 'Eu mesmo', email: 'eumesmo@email.com', telefone: '(XX) XXXXX-XXXX', image: './img/HomeMatcHAlpha.png' },
-    { id: '03', rua: 'Rua dos Alfeneiros', descricao: 'Esta casa é muito boa, não tem nada errado', numero: '06', bairro: 'Collington', cidade: 'Londres-ENG', metragem: '200 m²', proprietario: 'Eu mesmo', email: 'eumesmo@email.com', telefone: '(XX) XXXXX-XXXX', image: './img/HomeMatcHAlpha.png' },
-  ];
+const Home = ({ navigation }) => {
+  const [pesquisa, onChangePesquisa] = useState('');
+  const [anuncios, onChangeAnuncios] = useState([{}]);
+
+  api
+    .get(`users/${getId}`)
+    .then(res => {
+      setUser(res);
+    })
+    .catch(error => {
+      alert("Erro");
+      console.log(error);
+    });
+
+  api
+    .get(`real-states/${getId}`)
+    .then(res => {
+      onChangeAnuncios(res);
+    })
+    .catch(error => {
+      alert("Erro");
+      console.log(error);
+    });
+
+  const handlePesquisaImovel = () => {
+    if (pesquisa != '') {
+      api
+        .get(`real-states/${getId}`)
+        .then(res => {
+          onChangeAnuncios(res);
+        })
+        .catch(error => {
+          alert("Erro");
+          console.log(error);
+        });
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Image
@@ -14,6 +48,17 @@ const Home  = ({ navigation}) => {
         source={require('./img/HomeMatcHAlpha.png')}
       />
       <Text style={styles.title}>Seus imóveis</Text>
+      <View style={{ flexDirection: row }}>
+        <TextInput
+          style={{ marginTop: 10 }}
+          placeholder={'Pesquisa por cidade...'}
+          onChangeText={onChangePesquisa}
+          value={pesquisa}
+        />
+        <TouchableOpacity style={styles.button} onPress={() => handlePesquisaImovel()}>
+          <Text style={styles.buttonLabel}>Pesquisar</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         style={{ marginBottom: 100 }}
         data={anuncios}
@@ -25,8 +70,8 @@ const Home  = ({ navigation}) => {
                 source={require('./img/HomeMatcHAlpha.png')}
               />
               <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
-              <Text style={styles.buttonLabel}>{item.metragem}</Text>
-              <Text style={styles.buttonLabel}>{item.proprietario}</Text>
+              <Text style={styles.buttonLabel}>{item.metrosQuadrados}</Text>
+              <Text style={styles.buttonLabel}>{getUser.nome}</Text>
               <TouchableOpacity style={{
                 marginTop: 10,
                 alignSelf: 'center',
