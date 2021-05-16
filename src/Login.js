@@ -16,7 +16,7 @@ const Login = ({ navigation }) => {
         const { id } = res.data;
         setToken(token);
         setId(id);
-        navigation.navigate('Home');
+        navigation.navigate('TabsUser');
       })
       .catch(error => {
         alert(error);
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
   title: {
+    fontWeight: 'bold',
     marginTop: 20,
     alignSelf: 'center',
     fontSize: 30,

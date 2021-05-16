@@ -3,8 +3,9 @@ import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button } fro
 
 const Anuncios = ({ navigation }) => {
   const anuncios = [
-    { id: '01', endereco: 'Rua dos Alfeneiros, nº 4', metragem: '200 m²', proprietario: 'Eu mesmo', image: './img/HomeMatcHAlpha.png' },
-    { id: '02', endereco: 'Rua dos Alfeneiros, nº 4', metragem: '200 m²', proprietario: 'Eu mesmo', image: './img/HomeMatcHAlpha.png' },
+    { id: '01', rua: 'Rua dos Alfeneiros', descricao: 'Esta casa é muito boa, não tem nada errado', numero: '04', bairro: 'Collington', cidade: 'Londres-ENG', metragem: '200 m²', proprietario: 'Eu mesmo', email: 'eumesmo@email.com', telefone: '(XX) XXXXX-XXXX', image: './img/HomeMatcHAlpha.png' },
+    { id: '02', rua: 'Rua dos Alfeneiros', descricao: 'Esta casa é muito boa, não tem nada errado', numero: '05', bairro: 'Collington', cidade: 'Londres-ENG', metragem: '200 m²', proprietario: 'Eu mesmo', email: 'eumesmo@email.com', telefone: '(XX) XXXXX-XXXX', image: './img/HomeMatcHAlpha.png' },
+    { id: '03', rua: 'Rua dos Alfeneiros', descricao: 'Esta casa é muito boa, não tem nada errado', numero: '06', bairro: 'Collington', cidade: 'Londres-ENG', metragem: '200 m²', proprietario: 'Eu mesmo', email: 'eumesmo@email.com', telefone: '(XX) XXXXX-XXXX', image: './img/HomeMatcHAlpha.png' },
   ];
   return (
     <View style={styles.container}>
@@ -14,7 +15,7 @@ const Anuncios = ({ navigation }) => {
       />
       <Text style={styles.title}>Anuncios</Text>
       <FlatList
-        progressViewOffset="200"
+        style={{ marginBottom: 100 }}
         data={anuncios}
         renderItem={
           ({ item }) => (
@@ -23,11 +24,21 @@ const Anuncios = ({ navigation }) => {
                 style={styles.image}
                 source={require('./img/HomeMatcHAlpha.png')}
               />
-              <Text style={styles.buttonLabel}>{item.endereco}</Text>
+              <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
               <Text style={styles.buttonLabel}>{item.metragem}</Text>
               <Text style={styles.buttonLabel}>{item.proprietario}</Text>
-              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DetalheImovel', { imovel: item })}>
-                <Text style={styles.buttonLabel}>Detalhes</Text>
+              <TouchableOpacity style={{
+                marginTop: 10,
+                alignSelf: 'center',
+                padding: 5,
+                backgroundColor: '#633015',
+                width: '33%',
+              }} onPress={() => navigation.navigate('DetalheImovel', item)}>
+                <Text style={{
+                  alignSelf: 'center',
+                  fontSize: 18,
+                  color: '#E4B7A0',
+                }}>+ Info</Text>
               </TouchableOpacity>
             </View>
           )
@@ -43,9 +54,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginLeft: 30,
     marginRight: 30,
+    marginBottom: 30
   },
   title: {
+    fontWeight: 'bold',
     marginTop: 20,
+    marginBottom: 20,
     alignSelf: 'center',
     fontSize: 30,
     color: '#633015',
@@ -57,15 +71,15 @@ const styles = StyleSheet.create({
     width: '33%',
   },
   imovel: {
-    marginTop: 10,
+    marginBottom: 30,
     padding: 15,
-    alignSelf: 'center',
     backgroundColor: '#E4B7A0',
   },
   image: {
     alignSelf: 'center',
-    width: 170,
+    width: 300,
     height: 170,
+    marginBottom: 10,
   },
   buttonLabel: {
     alignSelf: 'center',

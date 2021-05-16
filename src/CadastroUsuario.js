@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
   title: {
+    fontWeight: 'bold',
     marginTop: 20,
     alignSelf: 'center',
     fontSize: 30,
