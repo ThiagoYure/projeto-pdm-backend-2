@@ -5,6 +5,7 @@ const Perfil  = ({ navigation }) => {
     return (
       <View>
         <Text>Perfil</Text>
+        <Button title="Sair" onPress={() => navigation.navigate('Anuncios')}/>
       </View>
     );
 }

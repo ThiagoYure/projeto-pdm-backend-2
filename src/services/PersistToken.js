@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from 'react-native';
 
 export const setToken = value => {
   AsyncStorage.setItem('token', value).catch(err => console.log(err));

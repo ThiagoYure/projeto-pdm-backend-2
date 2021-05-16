@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
-import React from 'react'
+import React from 'react';
+import { Image, TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -34,8 +35,8 @@ const Tabs = () => {
       }} name="Anuncios">
         {() => (
           <Stack.Navigator initialRouteName="Anuncios" >
-            <Stack.Screen name="Anuncios" component={Anuncios} />
-            <Stack.Screen name="DetalheImovel" component={DetalheImovel} />
+            <Stack.Screen name="Anuncios" options={{title: ""}} component={Anuncios} />
+            <Stack.Screen name="DetalheImovel" options={{title: ""}} component={DetalheImovel} />
           </Stack.Navigator>
         )}
       </Tab.Screen>
@@ -46,8 +47,8 @@ const Tabs = () => {
       }} name="Login">
         {() => (
           <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="CadastroUsuario" component={CadastroUsuario} />
+            <Stack.Screen name="Login" options={{title: ""}} component={Login} />
+            <Stack.Screen name="CadastroUsuario" options={{title: ""}} component={CadastroUsuario} />
           </Stack.Navigator>
         )}
       </Tab.Screen>
@@ -73,9 +74,10 @@ const TabsUser = () => {
         {() => (
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Home" component={Home} options={{
+              title: "",
               headerLeft: () => { null }
             }} />
-            <Stack.Screen name="EdicaoImovel" component={EdicaoImovel} />
+            <Stack.Screen name="EdicaoImovel" component={EdicaoImovel} options={{title: ""}}/>
           </Stack.Navigator>
         )}
       </Tab.Screen>
@@ -87,6 +89,7 @@ const TabsUser = () => {
         {() => (
           <Stack.Navigator>
             <Stack.Screen name="CadastroImovel" component={CadastroImovel} options={{
+              title: "",
               headerLeft: () => { null }
             }} />
           </Stack.Navigator>
@@ -100,6 +103,7 @@ const TabsUser = () => {
         {() => (
           <Stack.Navigator>
             <Stack.Screen name="Perfil" component={Perfil} options={{
+              title: "",
               headerLeft: () => { null }
             }} />
           </Stack.Navigator>
@@ -119,5 +123,11 @@ const Routes = () => {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  tela: {
+    backgroundColor: '#F6EEE0',
+  },
+});
 
 export default Routes;
