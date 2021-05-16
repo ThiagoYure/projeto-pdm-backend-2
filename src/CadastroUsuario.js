@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import api from './services/Api';
+import { setId, setToken } from './services/PersistToken';
 
 const CadastroUsuario = ({ navigation }) => {
   const [nome, onChangeNome] = useState('');

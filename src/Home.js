@@ -33,7 +33,7 @@ const Home  = ({ navigation}) => {
                 padding: 5,
                 backgroundColor: '#633015',
                 width: '33%',
-              }} onPress={() => navigation.navigate('DetalheImovel', item)}>
+              }} onPress={() => navigation.navigate('EdicaoImovel', item)}>
                 <Text style={{
                   alignSelf: 'center',
                   fontSize: 18,

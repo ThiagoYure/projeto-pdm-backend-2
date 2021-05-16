@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
         value={senha}
         secureTextEntry={true}
       />
-      <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
+      <TouchableOpacity style={styles.button} onPress={() => /*handleLogin()*/navigation.navigate('TabsUser')}>
         <Text style={styles.buttonLabel}>Entrar</Text>
       </TouchableOpacity>
       <View style={{ alignContent: 'center', flexDirection: 'row', paddingLeft: 40, paddingTop: 20 }}>
