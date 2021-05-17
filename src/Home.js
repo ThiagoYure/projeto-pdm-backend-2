@@ -1,34 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import api from './services/Api';
-import { setId, setToken, getId,} from './services/PersistToken';
+import { setId, setToken, getId, getToken } from './services/PersistToken';
 
 const Home = ({ navigation }) => {
+  const [id, onChangeId] = useState('');
+  const [token, onChangeToken] = useState('');
+  const [user, onChangeUser] = useState('');
   const [pesquisa, onChangePesquisa] = useState('');
   const [anuncios, onChangeAnuncios] = useState('');
 
-  const getUser = (id) => {
-    api
-    .get(`users/${id}`)
-    .then(res => {
-      console.log(res)
-      return res;
-    })
-    .catch(error => {
-      console.log(error.error);
+  useEffect(() => {
+    getToken().then(res => {
+      onChangeToken(res);
+      getId().then(r => {
+        api
+          .get(`users/${r}`)
+          .then(res => {
+            onChangeUser(res);
+          })
+          .catch(error => {
+            console.log(error.error);
+          });
+      });
     });
-  }
-  api
-    .get(`real-states/${getId}`)
-    .then(res => {
-      onChangeAnuncios(res);
-      console.log(anuncios);
-    })
-    .catch(error => {
-      console.log(error.error);
-    });
+  }, []);
 
-  const handlePesquisaImovel = () => {
+  if (anuncios == '') {
+    api
+      .get('real-estate/user', { headers: { 'authorization': token } })
+      .then(res => {
+        onChangeAnuncios(res.data);
+      })
+      .catch(error => {
+        console.log(error.error);
+      });
+  }
+
+  /*const handlePesquisaImovel = () => {
     if (pesquisa != '') {
       api
         .get(`real-states/${getId}`)
@@ -40,7 +49,7 @@ const Home = ({ navigation }) => {
           console.log(error.error);
         });
     }
-  }
+  }*/
 
   return (
     <View style={styles.container}>
@@ -49,7 +58,7 @@ const Home = ({ navigation }) => {
         source={require('./img/HomeMatcHAlpha.png')}
       />
       <Text style={styles.title}>Seus imóveis</Text>
-      <View style={{ flexDirection: 'row' }}>
+      {/*<View style={{ flexDirection: 'row' }}>
         <TextInput
           style={{ marginTop: 10, flex: 1 }}
           placeholder={'Pesquisa por cidade...'}
@@ -59,7 +68,7 @@ const Home = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={() => handlePesquisaImovel()}>
           <Text style={styles.buttonLabel}>Pesquisar</Text>
         </TouchableOpacity>
-      </View>
+  </View>*/}
       <FlatList
         style={{ marginBottom: 100 }}
         data={anuncios}
@@ -68,11 +77,12 @@ const Home = ({ navigation }) => {
             <View style={styles.imovel}>
               <Image
                 style={styles.image}
-                source={require('./img/HomeMatcHAlpha.png')}
+                source={{
+                  uri: item.imagens,
+                }}
               />
               <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
-              <Text style={styles.buttonLabel}>{item.metrosQuadrados}</Text>
-              <Text style={styles.buttonLabel}>{getUser(item.userId).name}</Text>
+              <Text style={styles.buttonLabel}>{item.metrosQuadrados} m²</Text>
               <TouchableOpacity style={{
                 marginTop: 10,
                 alignSelf: 'center',

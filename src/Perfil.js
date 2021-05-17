@@ -109,6 +109,7 @@ const Perfil = ({ navigation }) => {
           placeholder={'Número...'}
           onChangeText={onChangeNumero}
           value={numero}
+          keyboardType="numeric"
         />
       </View>
       <TextInput

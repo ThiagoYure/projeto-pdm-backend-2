@@ -4,19 +4,19 @@ import api from './services/Api';
 import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
 
 const Anuncios = ({ navigation }) => {
-  const [anuncios, onChangeAnuncios] = useState([]);
+  const [anuncios, onChangeAnuncios] = useState('');
 
-  useEffect(() => {
+  if(anuncios == ''){
     api
-      .get(`real-estate`)
-      .then(res => {
-        onChangeAnuncios(res.data);
-      })
-      .catch(error => {
-        alert("Erro");
-        console.log(error);
-      });
-  }, []);
+    .get(`real-estate`)
+    .then(res => {
+      onChangeAnuncios(res.data);
+    })
+    .catch(error => {
+      alert("Erro");
+      console.log(error);
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -33,11 +33,13 @@ const Anuncios = ({ navigation }) => {
             <View style={styles.imovel}>
               <Image
                 style={styles.image}
-                source={require('./img/HomeMatcHAlpha.png')}
+                source={{
+                  uri: item.imagens,
+                }}
               />
               <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
-              <Text style={styles.buttonLabel}>{item.metragem}</Text>
-              <Text style={styles.buttonLabel}>{item.user.nome}</Text>
+              <Text style={styles.buttonLabel}>{item.metrosQuadrados} m²</Text>
+              <Text style={styles.buttonLabel}>Proprietário: {item.user.nome}</Text>
               <TouchableOpacity style={{
                 marginTop: 10,
                 alignSelf: 'center',

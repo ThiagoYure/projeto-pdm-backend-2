@@ -13,7 +13,9 @@ const DetalheImovel = ({ navigation, route }) => {
       <Text style={styles.title}>Detalhes do Imóvel</Text>
       <Image
         style={styles.image}
-        source={require('./img/HomeMatcHAlpha.png')}
+        source={{
+          uri: route.params.imagens,
+        }}
       />
       <Text style={styles.label}>{route.params.rua}, nº {route.params.numero} - {route.params.bairro}, {route.params.cidade}</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
@@ -21,30 +23,21 @@ const DetalheImovel = ({ navigation, route }) => {
           fontSize: 18,
           color: '#633015',
         }}>{route.params.descricao}</Text>
+      </View>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         <Text style={{
           fontSize: 18,
           color: '#633015',
-        }}>{route.params.metrosQuadrados}</Text>
+        }}>{route.params.metrosQuadrados} m²</Text>
         <Text style={{
           fontSize: 18,
           color: '#633015',
-        }}>{route.params.preco}</Text>
+          marginLeft: 30,
+        }}>R${route.params.preco}</Text>
       </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         <Text style={styles.label}>Proprietário(a): </Text>
-        <Text style={styles.buttonLabel}>{
-          () => {
-            api
-              .get(`users/${route.params.userId}`)
-              .then(res => {
-                return res.nome
-              })
-              .catch(error => {
-                alert("Erro");
-                console.log(error);
-              });
-          }
-        }</Text>
+        <Text style={styles.label}>{route.params.user.nome}</Text>
       </View>
       <View style={{ flexDirection: 'column' }}>
         <Text style={{
@@ -57,37 +50,13 @@ const DetalheImovel = ({ navigation, route }) => {
           marginRight: '10%',
           fontSize: 18,
           color: '#633015',
-        }}>{
-            () => {
-              api
-                .get(`users/${route.params.userId}`)
-                .then(res => {
-                  return res.email
-                })
-                .catch(error => {
-                  alert("Erro");
-                  console.log(error);
-                });
-            }
-          }</Text>
+        }}>{route.params.user.email}</Text>
         <Text style={{
           marginLeft: '10%',
           marginRight: '10%',
           fontSize: 18,
           color: '#633015',
-        }}>{
-            () => {
-              api
-                .get(`users/${route.params.userId}`)
-                .then(res => {
-                  return res.telefone
-                })
-                .catch(error => {
-                  alert("Erro");
-                  console.log(error);
-                });
-            }
-          }</Text>
+        }}>{route.params.user.telefone}</Text>
       </View>
     </ScrollView>
   );

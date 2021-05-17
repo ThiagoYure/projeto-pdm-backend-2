@@ -66,6 +66,7 @@ const CadastroUsuario = ({ navigation }) => {
           placeholder={'Número...'}
           onChangeText={onChangeNumero}
           value={numero}
+          keyboardType="numeric"
         />
       </View>
       <TextInput

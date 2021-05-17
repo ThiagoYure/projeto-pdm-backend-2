@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 import api from './services/Api';
 import { setId, setToken, getUser } from './services/PersistToken';
 
 const EdicaoImovel = ({ navigation, route }) => {
   const [id, onChangeId] = useState(route.params.id);
-  const idUser = getUser.id;
   const [cidade, onChangeCidade] = useState(route.params.cidade);
   const [bairro, onChangeBairro] = useState(route.params.bairro);
+  const [imagens, onChangeImagens] = useState(route.params.imagens);
   const [rua, onChangeRua] = useState(route.params.rua);
   const [numero, onChangeNumero] = useState(route.params.numero);
   const [descricao, onChangeDescricao] = useState(route.params.descricao);
-  const [metrosQuadrados, onChangeMetrosQuadrados] = useState(route.params.metrosQuadrados);
-  const [preco, onChangePreco] = useState(route.params.preco);
+  const [metrosQuadrados, onChangeMetrosQuadrados] = useState(route.params.metrosQuadrados+'');
+  const [preco, onChangePreco] = useState(route.params.preco+'');
+
+  console.log(parseInt(preco));
 
   const handleEdicaoImovel = () => {
     const data = { metrosQuadrados, descricao, idUser, cidade, rua, bairro, numero,preco };
@@ -49,7 +52,9 @@ const EdicaoImovel = ({ navigation, route }) => {
       />
       <Image
         style={styles.image}
-        source={require('./img/HomeMatcHAlpha.png')}
+        source={{
+          uri: imagens
+        }}
       />
       <TouchableOpacity style={styles.button} onPress={() => ''}>
         <Text style={styles.buttonLabel}>Nova Foto</Text>
@@ -80,6 +85,7 @@ const EdicaoImovel = ({ navigation, route }) => {
           placeholder={'Número...'}
           onChangeText={onChangeNumero}
           value={numero}
+          keyboardType="numeric"
         />
       </View>
       <TextInput
@@ -94,12 +100,14 @@ const EdicaoImovel = ({ navigation, route }) => {
           placeholder={'Metragem Quadrática...'}
           onChangeText={onChangeMetrosQuadrados}
           value={metrosQuadrados}
+          keyboardType="numeric"
         />
         <TextInput
           style={{ marginTop: 10 }}
           placeholder={'Preco...'}
           onChangeText={onChangePreco}
           value={preco}
+          keyboardType="numeric"
         />
       </View>
       <View style={{ flexDirection: 'row', paddingBottom: 20, }}>
