@@ -1,49 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import api from './services/Api';
-import imovelService from './services/imovelService';
-import { setId, setToken, getUser, getId } from './services/PersistToken';
+import ImovelService from './services/imovelService';
+import { setId, setToken, getUser, getId, getToken } from './services/PersistToken';
 
 const CadastroImovel = ({ navigation }) => {
-  const userId = getId;
+  // TODO mover para context
+  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState('');
+  
   const [cidade, onChangeCidade] = useState('');
   const [bairro, onChangeBairro] = useState('');
   const [rua, onChangeRua] = useState('');
-  const [numero, onChangeNumero] = useState('');
-  const [imagens, onChangeImagens] = useState('');
-  const [imagePath, onChangeImagePath] = useState('');
+  const [numero, onChangeNumero] = useState(null);
   const [descricao, onChangeDescricao] = useState('');
   const [metrosQuadrados, onChangeMetrosQuadrados] = useState('');
   const [preco, onChangePreco] = useState('');
+
+  const [imagePath, onChangeImagePath] = useState('');
   const [imagem, onChangeImagem] = useState('');
 
-  const handleCadastroImovel = () => {
-    console.log(imagePath);
-    const data = { metrosQuadrados, imagens, imagePath, descricao, userId, cidade, rua, bairro, numero, preco };
-    const newData = imovelService.create(data);
+  useEffect(() => {
+    getId().then(res => setUserId(res));
+    getToken().then(res => setToken(res));
+  }, []);
+
+  const handleSubmit = async () => {
+    const data = {
+      cidade,
+      bairro,
+      rua,
+      numero,
+      descricao,
+      preco,
+      metrosQuadrados,
+    };
     api
-      .post(`real-estates`, newData)
-      .then(res => {
-        alert("Imóvel cadastrado com sucesso!");
+      .post('real-estate', data, {headers: {authorization: token}})
+      .then(async res => {
+        const directoryName = `${userId}/${res.data.id}`;
+        const uri = await ImovelService.create(imagePath, directoryName);
+        console.log(uri);
+        alert("Imóvel cadastrado com sucesso");
       })
-      .catch(error => {
-        console.log(error);
+      .catch(err => {
+        alert('Erro ao registrar');
+        console.log(err);
       });
   };
 
-  const addImagem = () => {
-    onChangeImagePath(imagePath+","+imagem);
-  };
-
-  const handlePhoto = () => {
+  const handleAddImage = () => {
     launchImageLibrary({}, response => {
-      if(response.didCancel){
+      if (response.didCancel) {
         return;
+      } else if (response.error) {
+        console.log('ImagePicker error: ', response.error);
+        return;
+      } else {
+        onChangeImagePath(response.uri);
       }
-      onChangeImagem(response.uri);
-      addImagem();
-    })
+    });
   };
 
   return (
@@ -52,7 +69,7 @@ const CadastroImovel = ({ navigation }) => {
         style={styles.logo}
         source={require('./img/HomeMatcHAlpha.png')}
       />
-      <TouchableOpacity style={styles.button} onPress={()=>{handlePhoto()}}>
+      <TouchableOpacity style={styles.button} onPress={()=>{handleAddImage()}}>
         <Text style={styles.buttonLabel}>Nova Foto</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row' }}>
@@ -110,7 +127,7 @@ const CadastroImovel = ({ navigation }) => {
           padding: 5,
           backgroundColor: '#E4B7A0',
           width: '33%',
-        }} onPress={() => handleCadastroImovel()}>
+        }} onPress={() => handleSubmit()}>
           <Text style={styles.buttonLabel}>Salvar</Text>
         </TouchableOpacity>
       </View>
