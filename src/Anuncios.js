@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
 import api from './services/Api';
 import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
 
 const Anuncios = ({ navigation }) => {
-  const [anuncios, onChangeAnuncios] = useState([{}]);
+  const [anuncios, onChangeAnuncios] = useState([]);
 
-  api
-    .get(`real-states`)
-    .then(res => {
-      onChangeAnuncios(res);
-    })
-    .catch(error => {
-      alert("Erro");
-      console.log(error);
-    });
+  useEffect(() => {
+    api
+      .get(`real-estate`)
+      .then(res => {
+        onChangeAnuncios(res.data);
+      })
+      .catch(error => {
+        alert("Erro");
+        console.log(error);
+      });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -35,19 +37,7 @@ const Anuncios = ({ navigation }) => {
               />
               <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
               <Text style={styles.buttonLabel}>{item.metragem}</Text>
-              <Text style={styles.buttonLabel}>{
-                () => {
-                  api
-                    .get(`users/${item.userId}`)
-                    .then(res => {
-                      return res.nome
-                    })
-                    .catch(error => {
-                      alert("Erro");
-                      console.log(error);
-                    });
-                }
-              }</Text>
+              <Text style={styles.buttonLabel}>{item.user.nome}</Text>
               <TouchableOpacity style={{
                 marginTop: 10,
                 alignSelf: 'center',
