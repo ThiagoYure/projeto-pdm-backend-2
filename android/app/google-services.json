@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "484545937575",
+    "project_id": "homematch-97a4d",
+    "storage_bucket": "homematch-97a4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484545937575:android:e10a1c918bd2e04beb1b82",
+        "android_client_info": {
+          "package_name": "com.homematch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "484545937575-1d33dlfueoqbv0gqpopvifr4b36n5tih.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr9pWx85pIwdCim5WstgAH9xOVXZNE93s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484545937575-1d33dlfueoqbv0gqpopvifr4b36n5tih.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
