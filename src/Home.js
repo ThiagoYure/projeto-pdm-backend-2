@@ -1,32 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import api from './services/Api';
-import { setId, setToken, getId,} from './services/PersistToken';
+import { setId, setToken, getId, getToken,} from './services/PersistToken';
 
 const Home = ({ navigation }) => {
   const [pesquisa, onChangePesquisa] = useState('');
   const [anuncios, onChangeAnuncios] = useState('');
 
-  const getUser = (id) => {
-    api
-    .get(`users/${id}`)
-    .then(res => {
-      console.log(res)
-      return res;
-    })
-    .catch(error => {
-      console.log(error.error);
+  useEffect(() => {
+    getToken().then(token => {
+      api
+        .get('real-estate/user', {headers: {authorization: token}})
+        .then(res => {
+          console.log(res.data);
+          onChangeAnuncios(res.data);
+        })
+        .catch(error => {
+          console.log(error.error);
+        });
     });
-  }
-  api
-    .get(`real-states/${getId}`)
-    .then(res => {
-      onChangeAnuncios(res);
-      console.log(anuncios);
-    })
-    .catch(error => {
-      console.log(error.error);
-    });
+  });
 
   const handlePesquisaImovel = () => {
     if (pesquisa != '') {
@@ -72,7 +65,7 @@ const Home = ({ navigation }) => {
               />
               <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
               <Text style={styles.buttonLabel}>{item.metrosQuadrados}</Text>
-              <Text style={styles.buttonLabel}>{getUser(item.userId).name}</Text>
+              <Text style={styles.buttonLabel}>{item.user.nome}</Text>
               <TouchableOpacity style={{
                 marginTop: 10,
                 alignSelf: 'center',
