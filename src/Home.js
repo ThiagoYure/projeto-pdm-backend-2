@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
 import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import api from './services/Api';
-import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
+import { setId, setToken, getId,} from './services/PersistToken';
 
 const Home = ({ navigation }) => {
   const [pesquisa, onChangePesquisa] = useState('');
-  const [anuncios, onChangeAnuncios] = useState([{}]);
+  const [anuncios, onChangeAnuncios] = useState('');
 
-  api
-    .get(`users/${getId}`)
+  const getUser = (id) => {
+    api
+    .get(`users/${id}`)
     .then(res => {
-      setUser(res);
+      console.log(res)
+      return res;
     })
     .catch(error => {
-      alert("Erro");
-      console.log(error);
+      console.log(error.error);
     });
-
+  }
   api
     .get(`real-states/${getId}`)
     .then(res => {
       onChangeAnuncios(res);
+      console.log(anuncios);
     })
     .catch(error => {
-      alert("Erro");
-      console.log(error);
+      console.log(error.error);
     });
 
   const handlePesquisaImovel = () => {
@@ -36,7 +37,7 @@ const Home = ({ navigation }) => {
         })
         .catch(error => {
           alert("Erro");
-          console.log(error);
+          console.log(error.error);
         });
     }
   }
@@ -48,9 +49,9 @@ const Home = ({ navigation }) => {
         source={require('./img/HomeMatcHAlpha.png')}
       />
       <Text style={styles.title}>Seus imóveis</Text>
-      <View style={{ flexDirection: row }}>
+      <View style={{ flexDirection: 'row' }}>
         <TextInput
-          style={{ marginTop: 10 }}
+          style={{ marginTop: 10, flex: 1 }}
           placeholder={'Pesquisa por cidade...'}
           onChangeText={onChangePesquisa}
           value={pesquisa}
@@ -71,7 +72,7 @@ const Home = ({ navigation }) => {
               />
               <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
               <Text style={styles.buttonLabel}>{item.metrosQuadrados}</Text>
-              <Text style={styles.buttonLabel}>{getUser.nome}</Text>
+              <Text style={styles.buttonLabel}>{getUser(item.userId).name}</Text>
               <TouchableOpacity style={{
                 marginTop: 10,
                 alignSelf: 'center',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
 import api from './services/Api';
 import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';

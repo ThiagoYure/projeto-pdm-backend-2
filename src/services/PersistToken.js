@@ -30,17 +30,4 @@ export const getId = () => {
     .catch(err => console.log(err));
 };
 
-export const setUser = value => {
-  AsyncStorage.setItem('user', value).catch(err => console.log(err));
-};
 
-export const getUser = () => {
-  return AsyncStorage.getItem('user')
-    .then(res => {
-      if (res !== null) {
-        return res;
-      }
-    //   console.log('Erro');
-    })
-    .catch(err => console.log(err));
-};

@@ -1,29 +1,49 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker';
 import api from './services/Api';
-import { setId, setToken, getUser } from './services/PersistToken';
+import imovelService from './services/imovelService';
+import { setId, setToken, getUser, getId } from './services/PersistToken';
 
 const CadastroImovel = ({ navigation }) => {
-  const idUser = getUser.id;
+  const userId = getId;
   const [cidade, onChangeCidade] = useState('');
   const [bairro, onChangeBairro] = useState('');
   const [rua, onChangeRua] = useState('');
   const [numero, onChangeNumero] = useState('');
+  const [imagens, onChangeImagens] = useState('');
+  const [imagePath, onChangeImagePath] = useState('');
   const [descricao, onChangeDescricao] = useState('');
   const [metrosQuadrados, onChangeMetrosQuadrados] = useState('');
   const [preco, onChangePreco] = useState('');
+  const [imagem, onChangeImagem] = useState('');
 
   const handleCadastroImovel = () => {
-    const data = { metrosQuadrados, descricao, idUser, cidade, rua, bairro, numero, preco };
+    console.log(imagePath);
+    const data = { metrosQuadrados, imagens, imagePath, descricao, userId, cidade, rua, bairro, numero, preco };
+    const newData = imovelService.create(data);
     api
-      .post(`real-states`, data)
+      .post(`real-estates`, newData)
       .then(res => {
         alert("Imóvel cadastrado com sucesso!");
       })
       .catch(error => {
-        alert("Erro ao cadastrar Imóvel!");
         console.log(error);
       });
+  };
+
+  const addImagem = () => {
+    onChangeImagePath(imagePath+","+imagem);
+  };
+
+  const handlePhoto = () => {
+    launchImageLibrary({}, response => {
+      if(response.didCancel){
+        return;
+      }
+      onChangeImagem(response.uri);
+      addImagem();
+    })
   };
 
   return (
@@ -32,11 +52,7 @@ const CadastroImovel = ({ navigation }) => {
         style={styles.logo}
         source={require('./img/HomeMatcHAlpha.png')}
       />
-      <Image
-        style={styles.image}
-        source={require('./img/HomeMatcHAlpha.png')}
-      />
-      <TouchableOpacity style={styles.button} onPress={() => ''}>
+      <TouchableOpacity style={styles.button} onPress={()=>{handlePhoto()}}>
         <Text style={styles.buttonLabel}>Nova Foto</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row' }}>
@@ -88,19 +104,13 @@ const CadastroImovel = ({ navigation }) => {
         />
       </View>
       <View style={{ flexDirection: 'row', paddingBottom: 20, }}>
-        <TouchableOpacity style={styles.buttonMenor} onPress={() => handleDeleteImovel()}>
-          <Text style={{
-            alignSelf: 'center',
-            fontSize: 14,
-            color: '#633015',
-          }}>Deletar</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={{
           marginTop: 20,
+          alignSelf: 'center',
           padding: 5,
           backgroundColor: '#E4B7A0',
           width: '33%',
-        }} onPress={() => handleEdicaoImovel()}>
+        }} onPress={() => handleCadastroImovel()}>
           <Text style={styles.buttonLabel}>Salvar</Text>
         </TouchableOpacity>
       </View>

@@ -8,18 +8,18 @@ const Login = ({ navigation }) => {
   const [senha, onChangeSenha] = useState('');
 
   const handleLogin = () => {
-    const data = { email, password: senha };
+    const data = { email, senha };
     api
       .post('login', data)
       .then(res => {
         const token = res.data.token;
         const { id } = res.data;
         setToken(token);
-        setId(id);
+        setId(''+id);
         navigation.navigate('TabsUser');
       })
       .catch(error => {
-        alert(error);
+        alert(error.error);
         console.log(error);
       });
   };
@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
         value={senha}
         secureTextEntry={true}
       />
-      <TouchableOpacity style={styles.button} onPress={() => /*handleLogin()*/navigation.navigate('TabsUser')}>
+      <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
         <Text style={styles.buttonLabel}>Entrar</Text>
       </TouchableOpacity>
       <View style={{ alignContent: 'center', flexDirection: 'row', paddingLeft: 40, paddingTop: 20 }}>

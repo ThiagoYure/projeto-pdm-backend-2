@@ -1,26 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import api from './services/Api';
-import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
+import { setId, setToken, getId, getToken } from './services/PersistToken';
 
 const Perfil = ({ navigation }) => {
-  const [nome, onChangeNome] = useState(getUser.nome);
-  const [cidade, onChangeCidade] = useState(getUser.cidade);
-  const [bairro, onChangeBairro] = useState(getUser.bairro);
-  const [rua, onChangeRua] = useState(getUser.rua);
-  const [numero, onChangeNumero] = useState(getUser.numero);
-  const [telefone, onChangeTelefone] = useState(getUser.telefone);
-  const [email, onChangeEmail] = useState(getUser.email);
+
+  const [id, onChangeId] = useState('');
+  const [token, onChangeToken] = useState('');
+  const [nome, onChangeNome] = useState('');
+  const [cidade, onChangeCidade] = useState('');
+  const [bairro, onChangeBairro] = useState('');
+  const [rua, onChangeRua] = useState('');
+  const [numero, onChangeNumero] = useState('');
+  const [telefone, onChangeTelefone] = useState('');
+  const [email, onChangeEmail] = useState('');
+  const [senha, onChangeSenha] = useState('');
+  useEffect(() => {
+    getToken().then(res => {
+      onChangeToken(res);
+      getId().then(r => {
+        api
+          .get(`users/${r}`)
+          .then(res => {
+            onChangeId(r);
+            onChangeNome(res.data.nome);
+            onChangeRua(res.data.rua);
+            onChangeBairro(res.data.bairro);
+            onChangeCidade(res.data.cidade);
+            onChangeNumero(res.data.numero);
+            onChangeEmail(res.data.email);
+            onChangeSenha(res.data.senha);
+            onChangeTelefone(res.data.telefone);
+          })
+          .catch(error => {
+            console.log(error.error);
+          });
+      });
+    });
+  }, []);
 
   const handleEdicaoUser = () => {
-    const data = { email, senha, nome, telefone, cidade, rua, bairro, numero };
+    const data = { id, nome, email, telefone, cidade, rua, bairro, numero };
+    console.log("Oi" + token);
     api
-      .put(`users/${getId}`, data)
+      .put(`users/${id}`, data, { headers: { 'authorization': token } })
       .then(res => {
         alert("Usuário atualizado com sucesso!");
       })
       .catch(error => {
-        alert("Erro ao atualizar o usuário!");
         console.log(error);
       });
   };
@@ -28,19 +55,17 @@ const Perfil = ({ navigation }) => {
   const handleLogout = () => {
     setId('');
     setToken('');
-    setUser({});
     navigation.navigate('Tabs');
   };
 
   const handleDeletarUser = () => {
     api
-      .delete(`users/${getId}`)
+      .delete(`users/${id}`, { headers: { 'authorization': token } })
       .then(res => {
         alert("Conta apagada com sucesso!");
         handleLogout();
       })
       .catch(error => {
-        alert("Erro ao apagar a conta!");
         console.log(error);
       });
   };
@@ -60,13 +85,13 @@ const Perfil = ({ navigation }) => {
       />
       <View style={{ flexDirection: 'row' }}>
         <TextInput
-          style={{ marginTop: 10, flex: 1  }}
+          style={{ marginTop: 10, flex: 1 }}
           placeholder={'Cidade...'}
           onChangeText={onChangeCidade}
           value={cidade}
         />
         <TextInput
-          style={{ marginTop: 10, flex: 1  }}
+          style={{ marginTop: 10, flex: 1 }}
           placeholder={'Bairro...'}
           onChangeText={onChangeBairro}
           value={bairro}
@@ -80,7 +105,7 @@ const Perfil = ({ navigation }) => {
           value={rua}
         />
         <TextInput
-          style={{ marginTop: 10, flex: 1  }}
+          style={{ marginTop: 10, flex: 1 }}
           placeholder={'Número...'}
           onChangeText={onChangeNumero}
           value={numero}
@@ -104,7 +129,14 @@ const Perfil = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={() => handleLogout()}>
         <Text style={styles.buttonLabel}>Sair</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handleDeletarUser()}>
+      <TouchableOpacity style={{
+        marginBottom: 20,
+        marginTop: 20,
+        alignSelf: 'center',
+        padding: 5,
+        backgroundColor: '#E4B7A0',
+        width: '50%',
+      }} onPress={() => handleDeletarUser()}>
         <Text style={styles.buttonLabel}>Apagar Conta</Text>
       </TouchableOpacity>
     </ScrollView>
