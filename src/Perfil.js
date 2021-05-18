@@ -48,6 +48,7 @@ const Perfil = ({ navigation }) => {
         alert("Usuário atualizado com sucesso!");
       })
       .catch(error => {
+        alert("Problemas ao atualizar usuário!")
         console.log(error);
       });
   };

@@ -19,7 +19,7 @@ const Login = ({ navigation }) => {
         navigation.navigate('TabsUser');
       })
       .catch(error => {
-        alert(error.error);
+        alert("Dados incorretos!");
         console.log(error);
       });
   };
