@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import api from './services/Api';
 import { setId, setToken, getId, getToken } from './services/PersistToken';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Home = ({ navigation }) => {
   const [id, onChangeId] = useState('');
@@ -9,6 +10,21 @@ const Home = ({ navigation }) => {
   const [user, onChangeUser] = useState('');
   const [pesquisa, onChangePesquisa] = useState('');
   const [anuncios, onChangeAnuncios] = useState('');
+
+  if (anuncios == '') {
+    api
+      .get('real-estate/user', { headers: { 'authorization': token } })
+      .then(res => {
+        if (res.data == undefined) {
+          onChangeAnuncios('Sem Resultado');
+        } else {
+          onChangeAnuncios(res.data);
+        }
+      })
+      .catch(error => {
+        console.log(error.error);
+      });
+  }
 
   useEffect(() => {
     getToken().then(res => {
@@ -26,20 +42,20 @@ const Home = ({ navigation }) => {
     });
   }, []);
 
-  if (anuncios == '') {
+  const handleAtualizar = () => {
     api
       .get('real-estate/user', { headers: { 'authorization': token } })
       .then(res => {
-        if(res == []){
+        if (res.data == undefined) {
           onChangeAnuncios('Sem Resultado');
-        }else{
+        } else {
           onChangeAnuncios(res.data);
         }
       })
       .catch(error => {
         console.log(error.error);
       });
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -47,6 +63,15 @@ const Home = ({ navigation }) => {
         style={styles.logo}
         source={require('./img/HomeMatcHAlpha.png')}
       />
+      <TouchableOpacity style={{
+        alignSelf: 'center',
+        marginTop: 20,
+        padding: 5,
+        backgroundColor: '#E4B7A0',
+        width: '50%',
+      }} onPress={() => { handleAtualizar() }}>
+        <Text style={styles.buttonLabel}>Atualizar Página</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Seus imóveis</Text>
       {/*<View style={{ flexDirection: 'row' }}>
         <TextInput
@@ -60,7 +85,7 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
   </View>*/}
       <FlatList
-        style={{ marginBottom: 100 }}
+        style={{ marginBottom: 170 }}
         data={anuncios}
         renderItem={
           ({ item }) => (

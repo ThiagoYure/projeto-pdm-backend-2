@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
-import { Item } from 'react-native-paper/lib/typescript/components/List/List';
+import {launchImageLibrary} from 'react-native-image-picker';
 import api from './services/Api';
-import { setId, setToken, getUser } from './services/PersistToken';
+import ImovelService from './services/imovelService';
+import { setToken, getUser, getId, getToken } from './services/PersistToken';
 
 const EdicaoImovel = ({ navigation, route }) => {
+  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState('');
+
   const [id, onChangeId] = useState(route.params.id);
   const [cidade, onChangeCidade] = useState(route.params.cidade);
   const [bairro, onChangeBairro] = useState(route.params.bairro);
@@ -14,13 +18,37 @@ const EdicaoImovel = ({ navigation, route }) => {
   const [descricao, onChangeDescricao] = useState(route.params.descricao);
   const [metrosQuadrados, onChangeMetrosQuadrados] = useState(route.params.metrosQuadrados+'');
   const [preco, onChangePreco] = useState(route.params.preco+'');
+  const [imagePath, onChangeImagePath] = useState('');
+  const [imagem, onChangeImagem] = useState(route.params.imagens);
 
-  console.log(parseInt(preco));
+  useEffect(() => {
+    getId().then(res => setUserId(res));
+    getToken().then(res => setToken(res));
+  }, []);
 
-  const handleEdicaoImovel = () => {
-    const data = { metrosQuadrados, descricao, idUser, cidade, rua, bairro, numero,preco };
+  const handleEdicaoImovel = async () => {
+    console.log(id);
+    let imagens;
+    if(imagePath != ''){
+      imagens = await ImovelService.create(imagePath);
+    }else{
+      imagens = imagem;
+    }
+    console.log(imagePath);
+    console.log(imagens);
+    const data = {
+      cidade,
+      bairro,
+      rua,
+      numero,
+      descricao,
+      imagens,
+      preco: parseInt(preco),
+      metrosQuadrados: parseInt(metrosQuadrados),
+    };
+    console.log(data);
     api
-      .put(`real-states/${id}`, data)
+      .put(`real-estate/${id}`, data,  {headers: {authorization: token}})
       .then(res => {
         alert("Imóvel atualizado com sucesso!");
       })
@@ -30,10 +58,23 @@ const EdicaoImovel = ({ navigation, route }) => {
       });
   };
 
+  const handleAddImage = () => {
+    launchImageLibrary({}, response => {
+      if (response.didCancel) {
+        return;
+      } else if (response.error) {
+        console.log('ImagePicker error: ', response.error);
+        return;
+      } else {
+        onChangeImagem(response.uri);
+        onChangeImagePath(response.uri);
+      }
+    });
+  };
+
   const handleDeleteImovel = () => {
-    const data = { metrosQuadrados, descricao, cidade, rua, bairro, numero, preco };
     api
-      .delete(`real-states/${id}`)
+      .delete(`real-estate/${id}`, {headers: {authorization: token}})
       .then(res => {
         alert("Imóvel removido com sucesso!");
         navigation.navigate('Home');
@@ -53,11 +94,11 @@ const EdicaoImovel = ({ navigation, route }) => {
       <Image
         style={styles.image}
         source={{
-          uri: imagens
+          uri: imagem
         }}
       />
-      <TouchableOpacity style={styles.button} onPress={() => ''}>
-        <Text style={styles.buttonLabel}>Nova Foto</Text>
+      <TouchableOpacity style={styles.button} onPress={() =>{handleAddImage()} }>
+        <Text style={styles.buttonLabel}>Mudar Foto</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row' }}>
         <TextInput

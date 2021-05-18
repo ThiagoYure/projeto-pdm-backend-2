@@ -19,7 +19,7 @@ const CadastroImovel = ({ navigation }) => {
   const [preco, onChangePreco] = useState('');
 
   const [imagePath, onChangeImagePath] = useState('');
-  const [imagem, onChangeImagem] = useState('');
+  const [imagem, onChangeImagem] = useState('https://png.pngtree.com/png-vector/20190223/ourlarge/pngtree-vector-house-icon-png-image_695726.jpg');
 
   useEffect(() => {
     getId().then(res => setUserId(res));
@@ -27,7 +27,12 @@ const CadastroImovel = ({ navigation }) => {
   }, []);
 
   const handleSubmit = async () => {
-    const imagens = await ImovelService.create(imagePath);
+    let imagens;
+    if(imagePath != ''){
+      imagens = await ImovelService.create(imagePath);
+    }else{
+      imagens = imagem;
+    }
     const data = {
       cidade,
       bairro,
@@ -57,6 +62,7 @@ const CadastroImovel = ({ navigation }) => {
         console.log('ImagePicker error: ', response.error);
         return;
       } else {
+        onChangeImagem(response.uri);
         onChangeImagePath(response.uri);
       }
     });
@@ -67,6 +73,12 @@ const CadastroImovel = ({ navigation }) => {
       <Image
         style={styles.logo}
         source={require('./img/HomeMatcHAlpha.png')}
+      />
+      <Image
+        style={styles.image}
+        source={{
+          uri: imagem
+        }}
       />
       <TouchableOpacity style={styles.button} onPress={()=>{handleAddImage()}}>
         <Text style={styles.buttonLabel}>Nova Foto</Text>

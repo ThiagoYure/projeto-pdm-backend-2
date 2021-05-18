@@ -2,25 +2,46 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
 import api from './services/Api';
 import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Anuncios = ({ navigation }) => {
   const [anuncios, onChangeAnuncios] = useState('');
 
-  if(anuncios == ''){
-    api
-    .get(`real-estate`)
-    .then(res => {
-      if(res == []){
-        onChangeAnuncios('Sem Resultado');
-      }else{
-        onChangeAnuncios(res.data);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (anuncios == '' || anuncios == 'Sem Resultado') {
+        api
+          .get(`real-estate`)
+          .then(res => {
+            if (res.data == undefined) {
+              onChangeAnuncios('Sem Resultado');
+            } else {
+              onChangeAnuncios(res.data);
+            }
+          })
+          .catch(error => {
+            alert("Erro");
+            console.log(error);
+          });
       }
-    })
-    .catch(error => {
-      alert("Erro");
-      console.log(error);
-    });
-  }
+    }, [anuncios])
+  );
+
+  const handleAtualizar = () => {
+    api
+      .get(`real-estate`)
+      .then(res => {
+        if (res.data == undefined) {
+          onChangeAnuncios('Sem Resultado');
+        } else {
+          onChangeAnuncios(res.data);
+        }
+      })
+      .catch(error => {
+        alert("Erro");
+        console.log(error);
+      });
+  };
 
   return (
     <View style={styles.container}>
