@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
+import { TextInput, FlatList, Image, TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
 import api from './services/Api';
 import { setId, setToken, getId, getUser, setUser } from './services/PersistToken';
 
 const PesquisaImovel = ({ navigation }) => {
   const [pesquisa, onChangePesquisa] = useState('');
-  const [anuncios, onChangeAnuncios] = useState([{}]);
+  const [anuncios, onChangeAnuncios] = useState('');
 
   const handlePesquisaImovel = () => {
     if (pesquisa != '') {
       api
-        .get(`real-states`)
+        .get(`real-estate?cidade=${pesquisa}`)
         .then(res => {
-          onChangeAnuncios(res);
+          onChangeAnuncios(res.data);
         })
         .catch(error => {
           alert("Erro");
@@ -27,32 +27,34 @@ const PesquisaImovel = ({ navigation }) => {
         style={styles.logo}
         source={require('./img/HomeMatcHAlpha.png')}
       />
+      <View style={{ flexDirection: 'row' }}>
+        <TextInput
+          style={{ marginTop: 10, flex: 1 }}
+          placeholder={'digite o nome da cidade...'}
+          onChangeText={onChangePesquisa}
+          value={pesquisa}
+        />
+        <TouchableOpacity style={styles.button} 
+          onPress={() => handlePesquisaImovel()}>
+          <Text style={styles.buttonLabel}>Pesquisar</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.title}>Resultado da Pesquisa</Text>
       <FlatList
-        style={{ marginBottom: 100 }}
+        style={{ marginBottom: 150 }}
         data={anuncios}
         renderItem={
           ({ item }) => (
             <View style={styles.imovel}>
               <Image
                 style={styles.image}
-                source={require('./img/HomeMatcHAlpha.png')}
+                source={{
+                  uri: item.imagens,
+                }}
               />
               <Text style={styles.buttonLabel}>{item.rua}, nº {item.numero} - {item.bairro}, {item.cidade}</Text>
-              <Text style={styles.buttonLabel}>{item.metrosQuadrados}</Text>
-              <Text style={styles.buttonLabel}>{
-                () => {
-                  api
-                    .get(`users/${item.userId}`)
-                    .then(res => {
-                      return res.nome
-                    })
-                    .catch(error => {
-                      alert("Erro");
-                      console.log(error);
-                    });
-                }
-              }</Text>
+              <Text style={styles.buttonLabel}>{item.metrosQuadrados} m²</Text>
+              <Text style={styles.buttonLabel}>Proprietário: {item.user.nome}</Text>
               <TouchableOpacity style={{
                 marginTop: 10,
                 alignSelf: 'center',

@@ -30,26 +30,16 @@ const Home = ({ navigation }) => {
     api
       .get('real-estate/user', { headers: { 'authorization': token } })
       .then(res => {
-        onChangeAnuncios(res.data);
+        if(res == []){
+          onChangeAnuncios('Sem Resultado');
+        }else{
+          onChangeAnuncios(res.data);
+        }
       })
       .catch(error => {
         console.log(error.error);
       });
   }
-
-  /*const handlePesquisaImovel = () => {
-    if (pesquisa != '') {
-      api
-        .get(`real-states/${getId}`)
-        .then(res => {
-          onChangeAnuncios(res);
-        })
-        .catch(error => {
-          alert("Erro");
-          console.log(error.error);
-        });
-    }
-  }*/
 
   return (
     <View style={styles.container}>

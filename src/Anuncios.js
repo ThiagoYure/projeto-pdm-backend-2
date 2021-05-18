@@ -10,7 +10,11 @@ const Anuncios = ({ navigation }) => {
     api
     .get(`real-estate`)
     .then(res => {
-      onChangeAnuncios(res.data);
+      if(res == []){
+        onChangeAnuncios('Sem Resultado');
+      }else{
+        onChangeAnuncios(res.data);
+      }
     })
     .catch(error => {
       alert("Erro");

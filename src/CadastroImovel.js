@@ -33,8 +33,8 @@ const CadastroImovel = ({ navigation }) => {
       rua,
       numero,
       descricao,
-      preco,
-      metrosQuadrados,
+      preco: parseInt(preco),
+      metrosQuadrados: parseInt(metrosQuadrados),
     };
     api
       .post('real-estate', data, {headers: {authorization: token}})
@@ -98,6 +98,7 @@ const CadastroImovel = ({ navigation }) => {
           placeholder={'Número...'}
           onChangeText={onChangeNumero}
           value={numero}
+          keyboardType="numeric"
         />
       </View>
       <TextInput
@@ -112,15 +113,17 @@ const CadastroImovel = ({ navigation }) => {
           placeholder={'Metragem Quadrática...'}
           onChangeText={onChangeMetrosQuadrados}
           value={metrosQuadrados}
+          keyboardType="numeric"
         />
         <TextInput
           style={{ marginTop: 10 }}
           placeholder={'Preco...'}
           onChangeText={onChangePreco}
           value={preco}
+          keyboardType="numeric"
         />
       </View>
-      <View style={{ flexDirection: 'row', paddingBottom: 20, }}>
+      <View style={{paddingBottom: 20, }}>
         <TouchableOpacity style={{
           marginTop: 20,
           alignSelf: 'center',
