@@ -11,7 +11,7 @@ const Home = ({ navigation }) => {
   const [pesquisa, onChangePesquisa] = useState('');
   const [anuncios, onChangeAnuncios] = useState('');
 
-  if (anuncios == '') {
+  /*if (anuncios == '') {
     api
       .get('real-estate/user', { headers: { 'authorization': token } })
       .then(res => {
@@ -24,7 +24,7 @@ const Home = ({ navigation }) => {
       .catch(error => {
         console.log(error.error);
       });
-  }
+  }*/
 
   useEffect(() => {
     getToken().then(res => {
@@ -70,7 +70,7 @@ const Home = ({ navigation }) => {
         backgroundColor: '#E4B7A0',
         width: '50%',
       }} onPress={() => { handleAtualizar() }}>
-        <Text style={styles.buttonLabel}>Atualizar Página</Text>
+        <Text style={styles.buttonLabel}>Carregar imóveis</Text>
       </TouchableOpacity>
       <Text style={styles.title}>Seus imóveis</Text>
       {/*<View style={{ flexDirection: 'row' }}>

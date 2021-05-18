@@ -7,7 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 const Anuncios = ({ navigation }) => {
   const [anuncios, onChangeAnuncios] = useState('');
 
-  useFocusEffect(
+  /*useFocusEffect(
     React.useCallback(() => {
       if (anuncios == '' || anuncios == 'Sem Resultado') {
         api
@@ -25,7 +25,7 @@ const Anuncios = ({ navigation }) => {
           });
       }
     }, [anuncios])
-  );
+  );*/
 
   const handleAtualizar = () => {
     api
@@ -49,9 +49,18 @@ const Anuncios = ({ navigation }) => {
         style={styles.logo}
         source={require('./img/HomeMatcHAlpha.png')}
       />
+      <TouchableOpacity style={{
+        alignSelf: 'center',
+        marginTop: 20,
+        padding: 5,
+        backgroundColor: '#E4B7A0',
+        width: '50%',
+      }} onPress={() => { handleAtualizar() }}>
+        <Text style={styles.buttonLabel}>Carregar Anúncios</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Anuncios</Text>
       <FlatList
-        style={{ marginBottom: 100 }}
+        style={{ marginBottom: 170 }}
         data={anuncios}
         renderItem={
           ({ item }) => (
