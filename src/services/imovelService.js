@@ -1,8 +1,9 @@
 import storage from '@react-native-firebase/storage';
 
 export default {
-  async create(imagePath, directory) {
-    return await this.uploadImage(directory, imagePath);
+  async create(imagePath) {
+    const fullPath = await this.uploadImage(imagePath);
+    return await storage().ref(fullPath).getDownloadURL();
   },
 
   async list(id) {
@@ -18,10 +19,9 @@ export default {
     return query;
   },
 
-  async uploadImage(directory, imagePath) {
-    let snapshot = await storage()
-      .ref(`/${directory}/principal.jpg`)
-      .putFile(imagePath);
+  async uploadImage(imagePath) {
+    let timestamp = new Date().getTime();
+    let snapshot = await storage().ref(`/${timestamp}.jpg`).putFile(imagePath);
     return snapshot.metadata.fullPath;
   },
 };

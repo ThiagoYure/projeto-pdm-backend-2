@@ -27,21 +27,20 @@ const CadastroImovel = ({ navigation }) => {
   }, []);
 
   const handleSubmit = async () => {
+    const imagens = await ImovelService.create(imagePath);
     const data = {
       cidade,
       bairro,
       rua,
       numero,
       descricao,
+      imagens,
       preco: parseInt(preco),
       metrosQuadrados: parseInt(metrosQuadrados),
     };
     api
       .post('real-estate', data, {headers: {authorization: token}})
-      .then(async res => {
-        const directoryName = `${userId}/${res.data.id}`;
-        const uri = await ImovelService.create(imagePath, directoryName);
-        console.log(uri);
+      .then(() => {
         alert("Imóvel cadastrado com sucesso");
       })
       .catch(err => {
